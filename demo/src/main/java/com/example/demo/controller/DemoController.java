@@ -1,22 +1,36 @@
 package com.example.demo.controller;
 
+import java.net.PasswordAuthentication;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.core.session.SessionInformation;
+//import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.Models.ERole;
+import com.example.demo.Models.RoleEntity;
+import com.example.demo.Models.UserEntity;
+import com.example.demo.Repository.UserRepository;
+import com.example.demo.controller.RequestDTO.CreateUserDTO;
+
 import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,15 +41,22 @@ import org.slf4j.LoggerFactory;
 @RequestMapping("v1")
 public class DemoController {
     
-    final private Logger logger = LoggerFactory.getLogger(DemoController.class);
 
     @Autowired
-    private SessionRegistry sessionRegistry;
+    SessionRegistry sessionRegistry; 
+    
+    final private Logger logger = LoggerFactory.getLogger(DemoController.class);
+
+    /**@Autowired
+    private SessionRegistry sessionRegistry;**/
+
+    @Autowired
+    UserRepository userRepository;
 
     // Llamada READ: lee todos los usuarios, con llamada HTTP tipo GET.
     @GetMapping("/index")
     public String index(){
-        return "Hello World!";
+        return "Hello World ASEGURADO!";
     }
 
     @GetMapping("/index2")
@@ -43,8 +64,8 @@ public class DemoController {
         return "Contenido NO SEGURIZADO";
     }
 
-    @GetMapping("/session")
-    public ResponseEntity<?> getDetailsSession(){
+    // @GetMapping("/session")
+    /**public ResponseEntity<?> getDetailsSession(){
         User user = null;
         String sessionId = "";
         
@@ -68,6 +89,32 @@ public class DemoController {
         response.put("sessionUser", user);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }*/
+
+    @PostMapping("/createUser")
+    public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserDTO userRequestDTO){
+       
+        Set<RoleEntity> roles = userRequestDTO.getRoles().stream().map(
+            roleName -> 
+                RoleEntity.builder().name(ERole.valueOf(roleName)).build()).collect(Collectors.toSet()
+            );
+        
+        UserEntity userEntity = UserEntity.builder()
+            .email(userRequestDTO.getEmail())
+            .username(userRequestDTO.getUsername())
+            .password(userRequestDTO.getPassword())
+            .roles(roles)
+            .build();
+
+        userRepository.save(userEntity);
+
+        return ResponseEntity.ok(userEntity);
+    }
+
+    @DeleteMapping("/deleteUser")
+    public String deleteUser(@RequestParam String id){
+       userRepository.deleteById(Long.parseLong(id));
+        return "Se ha borrado el usuario con id: " + id;
     }
 
 
