@@ -1,20 +1,13 @@
-package com.example.demo.controller;
+package com.example.pruebas.controller;
 
-import java.net.PasswordAuthentication;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.crypto.password.PasswordEncoder;
 //import org.springframework.security.core.session.SessionInformation;
 //import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,13 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.Models.ERole;
-import com.example.demo.Models.RoleEntity;
-import com.example.demo.Models.UserEntity;
-import com.example.demo.Repository.UserRepository;
-import com.example.demo.controller.RequestDTO.CreateUserDTO;
+import com.example.pruebas.Models.ERole;
+import com.example.pruebas.Models.RoleEntity;
+import com.example.pruebas.Models.UserEntity;
+import com.example.pruebas.Repository.UserRepository;
+import com.example.pruebas.controller.RequestDTO.CreateUserDTO;
 
-import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,13 +31,13 @@ import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("v1")
-public class DemoController {
+public class PruebaSprintSecurityController {
     
 
     @Autowired
     SessionRegistry sessionRegistry; 
     
-    final private Logger logger = LoggerFactory.getLogger(DemoController.class);
+    final private Logger logger = LoggerFactory.getLogger(PruebaSprintSecurityController.class);
 
     /**@Autowired
     private SessionRegistry sessionRegistry;**/

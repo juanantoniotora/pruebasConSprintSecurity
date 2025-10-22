@@ -1,4 +1,4 @@
-package com.example.demo.Config;
+package com.example.pruebas.Config;
 
 import java.nio.file.DirectoryStream.Filter;
 

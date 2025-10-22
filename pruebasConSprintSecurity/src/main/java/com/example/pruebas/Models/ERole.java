@@ -1,4 +1,4 @@
-package com.example.demo.Models;
+package com.example.pruebas.Models;
 
 import javax.persistence.Table;
 
